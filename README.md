@@ -27,6 +27,10 @@ ESLint
 
 `npx prisma init`
 
+- To run my migrations `npx prisma migrate dev`
+
+- To see tables `npx prisma studio`
+
 ### Docker
 
 `docker run`
