@@ -17,13 +17,21 @@ model User {
   password_hash String
   created_at DateTime @default(now())
 
+  attendances Attendance[]
+
   @@map("users")
 }
 
 model Attendance {
   id String @id @default(uuid())
   created_at DateTime @default(now())
-  validate_at DateTime?
+  validate_at DateTime? 
+
+  user User @relation(fields: [user_id], references: [id])
+  user_id String
+
+  school School @relation(fields: [school_id], references: [id])
+  school_id String 
 
   @@map("attendances")
 }
@@ -35,6 +43,8 @@ model School {
   phone String?
   latitude Decimal
   longitude Decimal
+
+  attendances Attendance[]
 
   @@map("schools")
 }

@@ -34,3 +34,7 @@ ESLint
 ### Docker
 
 `docker run`
+
+`docker start id_conteiner`
+
+`docker stop id_conteiner`
