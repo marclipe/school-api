@@ -38,3 +38,6 @@ ESLint
 `docker start id_conteiner`
 
 `docker stop id_conteiner`
+
+Bcryptjs
+`npm i bcryptjs`
