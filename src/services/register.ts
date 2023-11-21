@@ -1,6 +1,5 @@
-import { prisma } from '@/lib/prisma';
+import { UsersRepository } from '@/repositories/users-repository';
 import { hash } from 'bcryptjs';
-import { PrismaUserRepository } from '@/repositories/prisma-users-repository';
 
 interface RegisterServiceRequest {
   name: string;
@@ -8,24 +7,27 @@ interface RegisterServiceRequest {
   password: string;
 }
 
-export async function registerService({name, email, password}: RegisterServiceRequest) {
-    const password_hash = await hash(password, 6); //rounds = 6
+//D ⇒ Dependency Inversion Principle
 
-    const userWithSameEmail = await prisma.user.findUnique({
-        where: {
+export class RegisterService {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    constructor(private userRepository: UsersRepository) {}
+
+    async execute({name, email, password}: RegisterServiceRequest) {
+        const password_hash = await hash(password, 6); //rounds = 6
+
+        const userWithSameEmail = await this.userRepository.findByEmail(email);
+
+        if (userWithSameEmail) {
+            throw new Error('E-mail already exists!');
+        }
+
+        // const prismaUserRepository = new PrismaUserRepository();
+
+        await this.userRepository.create({
+            name,
             email,
-        },
-    });
-
-    if (userWithSameEmail) {
-        throw new Error('E-mail already exists!');
+            password_hash
+        });
     }
-
-    const prismaUserRepository = new PrismaUserRepository;
-
-    prismaUserRepository.create({
-        name,
-        email,
-        password_hash
-    });
 }
